@@ -9,6 +9,8 @@ using MVC.Models;
 
 namespace MVC.Controllers
 {
+    //[NonController] К контроллеру нельзя будет обртиться через адресную строку
+    //[NonAction] К методу нельзя будет обратиться через адрусную строку
     public class PhonesController : Controller
     {
         private readonly MobileContext _context;
@@ -133,8 +135,8 @@ namespace MVC.Controllers
             return View(phone);
         }
 
-        // POST: Phones/Delete/5
-        [HttpPost, ActionName("Delete")]
+        // POST: Phones/Delete/5    <именно в для адресной строки метод назван иначе
+        [HttpPost, ActionName("Delete")]            
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

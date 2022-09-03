@@ -33,5 +33,11 @@ namespace MVC.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public string Meth(int id, int quantity)
+        {
+            //Home/Meth?id=5&quantity=20 автоматический парсинг
+            return "";
+        }
     }
 }
