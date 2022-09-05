@@ -28,12 +28,21 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="BrandSite" class="control-label"></label>
+                <input asp-for="BrandSite" class="form-control" />
+                <span asp-validation-for="BrandSite" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
+@*<form action="/" method="post">   пример формы для post в GeometryController
+    <input type="type" name="width"/>
+    <input type="type" name="height" />
+</form>*@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
