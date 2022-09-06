@@ -8,21 +8,21 @@ namespace MVC.Controllers
 {
     public class OrdersController : Controller
     {
-        private readonly MobileContext _context;
+        private readonly ShopContext _context;
 
-        public OrdersController(MobileContext context)
+        public OrdersController(ShopContext context)
         {
             _context = context;
         }
         public IActionResult Index()
         {
-            List<Order> orders = _context.Orders.Include(o=>o.Phone).ToList();
+            List<Order> orders = _context.Orders.Include(o=>o.Product).ToList();
             return View(orders);
         }
-        public IActionResult Create(int phoneId)
+        public IActionResult Create(int productId)
         {
-            Phone phone = _context.Phones.FirstOrDefault(p => p.Id == phoneId);
-            return View(new Order { Phone = phone});
+            Product product = _context.Product.FirstOrDefault(p => p.Id == productId);
+            return View(new Order { Product = product });
         }
         [HttpPost]
         public IActionResult Create(Order order)

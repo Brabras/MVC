@@ -1,4 +1,4 @@
-﻿@model MVC.Models.Phone
+﻿@model MVC.Models.Product
 
 @{
     ViewData["Title"] = "Create";
@@ -6,7 +6,7 @@
 
 <h1>Create</h1>
 
-<h4>Phone</h4>
+<h4>Product</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,23 +14,26 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input required asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Company" class="control-label"></label>
-                <input asp-for="Company" class="form-control" />
-                <span asp-validation-for="Company" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
+                <input required asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BrandSite" class="control-label"></label>
-                <input asp-for="BrandSite" class="form-control" />
-                <span asp-validation-for="BrandSite" class="text-danger"></span>
+                <label asp-for="PictureLink" class="control-label"></label>
+                <input required asp-for="PictureLink" class="form-control" />
+                <span asp-validation-for="PictureLink" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Brand</label>
+                <select asp-for="BrandId" class ="form-control" asp-items="ViewBag.BrandId"></select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Category</label>
+                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -39,10 +42,6 @@
     </div>
 </div>
 
-@*<form action="/" method="post">   пример формы для post в GeometryController
-    <input type="type" name="width"/>
-    <input type="type" name="height" />
-</form>*@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

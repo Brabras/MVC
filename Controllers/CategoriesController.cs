@@ -1,37 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic.FileIO;
 using MVC.Models;
 
 namespace MVC.Controllers
 {
-    //[NonController] К контроллеру нельзя будет обртиться через адресную строку
-    //[NonAction] К методу нельзя будет обратиться через адрусную строку
-    public class PhonesController : Controller
+    public class CategoriesController : Controller
     {
-        private readonly MobileContext _context;
-        private readonly IWebHostEnvironment _appEnvironment;
+        private readonly ShopContext _context;
 
-        public PhonesController(MobileContext context, IWebHostEnvironment appEnvironment)
+        public CategoriesController(ShopContext context)
         {
             _context = context;
-            _appEnvironment = appEnvironment;
         }
 
-        // GET: Phones
+        // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Phones.ToListAsync());
+            return View(await _context.Category.ToListAsync());
         }
 
-        // GET: Phones/Details/5
+        // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -39,39 +32,41 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var phone = await _context.Phones
+            var category = await _context.Category
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (phone == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(phone);
+            return View(category);
         }
 
-        // GET: Phones/Create
+        // GET: Categories/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Phones/Create
+        // POST: Categories/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Company,Price,BrandSite")] Phone phone)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Category category)
         {
+            if (_context.Category.Any(b => b.Name == category.Name))
+                ModelState.AddModelError("Name", "Такой бренд уже есть, введите другое название");
             if (ModelState.IsValid)
             {
-                _context.Add(phone);
+                _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(phone);
+            return View(category);
         }
 
-        // GET: Phones/Edit/5
+        // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -79,28 +74,22 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var phone = await _context.Phones.FindAsync(id);
-            if (phone == null)
+            var category = await _context.Category.FindAsync(id);
+            if (category == null)
             {
                 return NotFound();
             }
-            return View(phone);
+            return View(category);
         }
 
-        public IActionResult BrandSite(int id)
-        {
-            string site = _context.Phones.FirstOrDefault(p => p.Id == id).BrandSite;
-            return Redirect(site);
-        }
-
-        // POST: Phones/Edit/5
+        // POST: Categories/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Company,Price,BrandSite")] Phone phone)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Category category)
         {
-            if (id != phone.Id)
+            if (id != category.Id)
             {
                 return NotFound();
             }
@@ -109,12 +98,12 @@ namespace MVC.Controllers
             {
                 try
                 {
-                    _context.Update(phone);
+                    _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PhoneExists(phone.Id))
+                    if (!CategoryExists(category.Id))
                     {
                         return NotFound();
                     }
@@ -125,10 +114,10 @@ namespace MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(phone);
+            return View(category);
         }
 
-        // GET: Phones/Delete/5
+        // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,39 +125,30 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var phone = await _context.Phones
+            var category = await _context.Category
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (phone == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(phone);
+            return View(category);
         }
 
-        // POST: Phones/Delete/5    <именно в для адресной строки метод назван иначе
+        // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var phone = await _context.Phones.FindAsync(id);
-            _context.Phones.Remove(phone);
+            var category = await _context.Category.FindAsync(id);
+            _context.Category.Remove(category);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PhoneExists(int id)
+        private bool CategoryExists(int id)
         {
-            return _context.Phones.Any(e => e.Id == id);
-        }
-        public IActionResult DownloadFile(int id)
-        {
-            Phone phone = _context.Phones.FirstOrDefault(p => p.Id == id);
-            string filename = $"{phone.Company}_{phone.Name}.txt";
-            var filePath = Path.Combine(_appEnvironment.ContentRootPath, $"wwwroot\\files\\{filename}");
-            if (System.IO.File.Exists(filePath))
-                return PhysicalFile(filePath, "text/*", filename);
-            else return NotFound();
+            return _context.Category.Any(e => e.Id == id);
         }
     }
 }

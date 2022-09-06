@@ -26,9 +26,9 @@
             <div class="form-row">
                 <label for="">
                     Смартфон
-                    <input disabled value="@Model.Phone.Name" type="text" />
+                    <input disabled value="@Model.Product.Name" type="text" />
                 </label>
-                <input type="hidden" asp-for="PhoneId" value="@Model.Phone.Id"/>
+                <input type="hidden" asp-for="ProductId" value="@Model.Product.Id" />
             </div>
             <button type="submit" class="btn btn-primary">Create order</button>
         </form>
