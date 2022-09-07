@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVC.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    [Migration("20220906121108_initial")]
+    [Migration("20220907081833_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,7 +29,7 @@ namespace MVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brand");
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("MVC.Models.Category", b =>
@@ -43,7 +43,7 @@ namespace MVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("MVC.Models.Order", b =>
@@ -83,7 +83,7 @@ namespace MVC.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<string>("CreatedDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -104,7 +104,7 @@ namespace MVC.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("MVC.Models.Order", b =>

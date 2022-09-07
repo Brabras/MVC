@@ -6,13 +6,25 @@
 
 <h1>Index</h1>
 
+<form method="post" asp-controller="Products" asp-action="Index" >
+    <p>Фильтровать по:</p>
+    <label for="s1">Бренду</label>
+    <select class="form-select" id="s1" name="BrandId" asp-items="ViewBag.BrandId">
+        <option disabled selected>--- SELECT ---</option>
+    </select>
+    <label for="s2">Категории</label>
+    <select class="form-select" id="s2" name="CategoryId" asp-items="ViewBag.CategoryId">
+        <option disabled selected>--- SELECT ---</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Фильтр</button>
+</form>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
 <container class="d-flex">
 @foreach (var item in Model) {
             <div class="card" style="width: 18rem;">
-                <img src="@item.PictureLink" class="card-img-top" alt="...">
+                <img src="@item.PictureLink" class="card-img-top embed-responsive-item img-fluid" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">Наименование: <span>@item.Name</span></h5>
                     <p class="card-text">Цена: <span>@item.Price</span></p>

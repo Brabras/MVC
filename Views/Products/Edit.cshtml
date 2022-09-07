@@ -38,6 +38,7 @@
                 <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
+            <input hidden type="text" asp-for="CreatedDate" value="@Model.CreatedDate"/>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

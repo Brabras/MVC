@@ -19,9 +19,9 @@ namespace MVC.Controllers
             List<Order> orders = _context.Orders.Include(o=>o.Product).ToList();
             return View(orders);
         }
-        public IActionResult Create(int productId)
+        public IActionResult Create(int Id)
         {
-            Product product = _context.Product.FirstOrDefault(p => p.Id == productId);
+            Product product = _context.Products.FirstOrDefault(p => p.Id == Id);
             return View(new Order { Product = product });
         }
         [HttpPost]

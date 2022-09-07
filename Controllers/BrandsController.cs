@@ -21,25 +21,7 @@ namespace MVC.Controllers
         // GET: Brands
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Brand.ToListAsync());
-        }
-
-        // GET: Brands/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var brand = await _context.Brand
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (brand == null)
-            {
-                return NotFound();
-            }
-
-            return View(brand);
+            return View(await _context.Brands.ToListAsync());
         }
 
         // GET: Brands/Create
@@ -55,63 +37,12 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Brand brand)
         {
-            if (_context.Brand.Any(b => b.Name == brand.Name))
+            if (_context.Brands.Any(b => b.Name == brand.Name))
                 ModelState.AddModelError("Name", "Такой бренд уже есть, введите другое название");
             else if (ModelState.IsValid)
             {
                 _context.Add(brand);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(brand);
-        }
-
-        // GET: Brands/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var brand = await _context.Brand.FindAsync(id);
-            if (brand == null)
-            {
-                return NotFound();
-            }
-            return View(brand);
-        }
-
-        // POST: Brands/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Brand brand)
-        {
-            if (id != brand.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(brand);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BrandExists(brand.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
                 return RedirectToAction(nameof(Index));
             }
             return View(brand);
@@ -125,7 +56,7 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var brand = await _context.Brand
+            var brand = await _context.Brands
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (brand == null)
             {
@@ -140,15 +71,15 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var brand = await _context.Brand.FindAsync(id);
-            _context.Brand.Remove(brand);
+            var brand = await _context.Brands.FindAsync(id);
+            _context.Brands.Remove(brand);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BrandExists(int id)
         {
-            return _context.Brand.Any(e => e.Id == id);
+            return _context.Brands.Any(e => e.Id == id);
         }
     }
 }

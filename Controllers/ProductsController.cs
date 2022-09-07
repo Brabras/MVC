@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Query;
 using MVC.Models;
 
 namespace MVC.Controllers
@@ -22,7 +26,26 @@ namespace MVC.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var shopContext = _context.Product.Include(p => p.Brand).Include(p => p.Category);
+
+            ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            var shopContext = _context.Products.Include(p => p.Brand).Include(p => p.Category);
+            return View(await shopContext.ToListAsync());
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Index(int? BrandId, int? CategoryId)
+        {
+            IIncludableQueryable<Product, Category> shopContext;
+            if (CategoryId == null && BrandId != null)
+                shopContext = _context.Products.Where(p => p.BrandId == BrandId).Include(p => p.Brand).Include(p => p.Category);
+            else if (BrandId == null && CategoryId != null)
+                shopContext = _context.Products.Where(p => p.CategoryId == CategoryId).Include(p => p.Brand).Include(p => p.Category);
+            else
+                shopContext = _context.Products.Where(p => p.CategoryId == CategoryId).Where(p => p.BrandId == BrandId).Include(p => p.Brand).Include(p => p.Category);
+            ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             return View(await shopContext.ToListAsync());
         }
 
@@ -34,7 +57,7 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product
+            var product = await _context.Products
                 .Include(p => p.Brand)
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -49,8 +72,8 @@ namespace MVC.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
-            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Name");
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
+            ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             return View();
         }
 
@@ -63,14 +86,14 @@ namespace MVC.Controllers
         {
             if (product != null)
             {
-                product.CreatedDate = DateTime.Now;
+                product.CreatedDate = DateTime.Now.ToString();
                 product.UpdateDate = DateTime.Now;
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Name", product.BrandId);
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", product.CategoryId);
+            ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -82,13 +105,13 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product.FindAsync(id);
+            var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
-            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Name", product.BrandId);
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", product.CategoryId);
+            ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -104,14 +127,11 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            if (product!=null)
+            if (product != null)
             {
                 try
                 {
                     product.UpdateDate = DateTime.Now;
-                    var contxt = _context;
-                    var orig = contxt.Product.FirstOrDefault(p=> p.Id == product.Id);
-                    product.CreatedDate = orig.CreatedDate;
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
@@ -128,8 +148,8 @@ namespace MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Name", product.BrandId);
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", product.CategoryId);
+            ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -141,7 +161,7 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product
+            var product = await _context.Products
                 .Include(p => p.Brand)
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -158,15 +178,15 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Product.FindAsync(id);
-            _context.Product.Remove(product);
+            var product = await _context.Products.FindAsync(id);
+            _context.Products.Remove(product);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExists(int id)
         {
-            return _context.Product.Any(e => e.Id == id);
+            return _context.Products.Any(e => e.Id == id);
         }
     }
 }
