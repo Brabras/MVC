@@ -29,10 +29,10 @@ namespace MVC.Controllers
 
             ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name");
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["Message"] = new List<int> {5,3,2,10,12 };
             var shopContext = _context.Products.Include(p => p.Brand).Include(p => p.Category);
             return View(await shopContext.ToListAsync());
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Index(int? BrandId, int? CategoryId)
@@ -134,6 +134,13 @@ namespace MVC.Controllers
                     product.UpdateDate = DateTime.Now;
                     _context.Update(product);
                     await _context.SaveChangesAsync();
+
+
+                    //product.CreatedDate = _context.Products.FirstOrDefault(p => p.Id == id).CreatedDate;
+                    //product.UpdateDate = DateTime.Now;
+                    //_context.Add(product);
+                    //await _context.SaveChangesAsync();
+                    //return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {

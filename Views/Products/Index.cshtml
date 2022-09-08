@@ -24,7 +24,7 @@
 <container class="d-flex">
 @foreach (var item in Model) {
             <div class="card" style="width: 18rem;">
-                <img src="@item.PictureLink" class="card-img-top embed-responsive-item img-fluid" alt="...">
+                <img src="@Url.Content(@item.PictureLink)" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">Наименование: <span>@item.Name</span></h5>
                     <p class="card-text">Цена: <span>@item.Price</span></p>
