@@ -1,4 +1,4 @@
-﻿@model MVC.Models.Product
+﻿@model MVC.Models.Book
 
 @{
     ViewData["Title"] = "Details";
@@ -7,7 +7,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Product</h4>
+    <h4>Book</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -17,34 +17,34 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
+            @Html.DisplayNameFor(model => model.Autor)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
+            @Html.DisplayFor(model => model.Autor)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
+            @Html.DisplayNameFor(model => model.PhotoLink)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedDate)
+            @Html.DisplayFor(model => model.PhotoLink)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdateDate)
+            @Html.DisplayNameFor(model => model.ReleaseDate)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdateDate)
+            @Html.DisplayFor(model => model.ReleaseDate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PictureLink)
+            @Html.DisplayNameFor(model => model.About)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PictureLink)
+            @Html.DisplayFor(model => model.About)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Brand)
+            @Html.DisplayNameFor(model => model.AddingDate)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Brand.Name)
+            @Html.DisplayFor(model => model.AddingDate)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
@@ -55,6 +55,5 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

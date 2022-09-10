@@ -21,19 +21,6 @@ namespace MVC.Controllers
             _logger = logger;
             _appEnvironment = appEnvironment;
         }
-        public IActionResult DownloadPhysicalFile()
-        {
-            string filePath = Path.Combine(_appEnvironment.ContentRootPath, "wwwroot/files/json.json");
-            string fileType = "application/json";
-            string fileName = "json.json";
-            return PhysicalFile(filePath, fileType, fileName); //скачивание физического файла из любого места
-        }
-        public IActionResult DownloadFile()
-        {
-            var filePath = Path.Combine("~/files", "json.json");
-            return File(filePath, "application/json", "json.json"); //скачивание физического файла из wwwroot
-        }
-
         public IActionResult Index()
         {
             return View();
@@ -49,12 +36,5 @@ namespace MVC.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-        public IActionResult Square()
-        {
-            //3 перегрузки метода RedirectToAction
-            return RedirectToAction("Create", "Phones", new {id=5, name="Brabras"});
-        }
-
     }
 }

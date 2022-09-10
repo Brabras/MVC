@@ -1,0 +1,40 @@
+﻿@model MVC.ViewModels.PersonTakeBookInfoesModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h1>Profile</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Person.Name)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Person.Name)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Person.Surname)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Person.Surname)
+    </dd>
+</dl>
+    <container class="d-flex justify-content-around" >
+
+        @if(Model.TakeBookInfoes!=null){
+@foreach(var item in Model.TakeBookInfoes){
+        <div class="card" style="width: 18rem;">
+            <img src="@item.Book.PhotoLink" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">@item.Book.Name</h5>
+                <p class="card-text">@item.Book.Autor</p>
+                <p class="card-text">@item.GiveDate</p>
+                <a asp-action="Details" asp-controller="Books" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+                    <a asp-action="Giveback" asp-route-id="@item.Id" class="btn btn-primary">Giveback</a>
+            </div>
+        </div>
+    }
+        }
+ 
+    </container>
+

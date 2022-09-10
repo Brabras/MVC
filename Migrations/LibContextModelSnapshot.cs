@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MVC.Migrations
 {
-    [DbContext(typeof(ShopContext))]
-    partial class ShopContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(LibContext))]
+    partial class LibContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -16,18 +16,46 @@ namespace MVC.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.28");
 
-            modelBuilder.Entity("MVC.Models.Brand", b =>
+            modelBuilder.Entity("MVC.Models.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("About")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AddingDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Autor")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsGiven")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhotoLink")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ReleaseDate")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands");
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("MVC.Models.Category", b =>
@@ -37,6 +65,7 @@ namespace MVC.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -44,87 +73,79 @@ namespace MVC.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("MVC.Models.Order", b =>
+            modelBuilder.Entity("MVC.Models.Person", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Address")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ContactPhone")
+                    b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Orders");
+                    b.ToTable("Persons");
                 });
 
-            modelBuilder.Entity("MVC.Models.Product", b =>
+            modelBuilder.Entity("MVC.Models.TakeBookInfo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("BrandId")
+                    b.Property<int>("BookId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<DateTime>("GiveDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PersonId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("CreatedDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PictureLink")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Price")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("UpdateDate")
+                    b.Property<DateTime?>("TakeBackDate")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BrandId");
+                    b.HasIndex("BookId");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("PersonId");
 
-                    b.ToTable("Products");
+                    b.ToTable("TakeBookInfos");
                 });
 
-            modelBuilder.Entity("MVC.Models.Order", b =>
+            modelBuilder.Entity("MVC.Models.Book", b =>
                 {
-                    b.HasOne("MVC.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("MVC.Models.Product", b =>
-                {
-                    b.HasOne("MVC.Models.Brand", "Brand")
-                        .WithMany()
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("MVC.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MVC.Models.TakeBookInfo", b =>
+                {
+                    b.HasOne("MVC.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MVC.Models.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

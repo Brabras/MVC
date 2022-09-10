@@ -1,0 +1,40 @@
+﻿@model MVC.ViewModels.BooksListViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<container class="d-flex justify-content-around">
+@foreach(var item in Model.Books){
+        <div class="card" style="width: 18rem;">
+            <img src="@item.PhotoLink" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">@item.Name</h5>
+                <p class="card-text">@item.Autor</p>
+                <p class="card-text">
+                    @{string text = item.IsGiven == true ? "Выдана" : "Свободна";}
+                    @text
+                </p>
+                <a asp-action="Create" asp-controller="TakeBookInfoes" asp-route-id="@item.Id" class="btn btn-primary">Взять почитать</a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-primary">delete</a>
+            </div>
+        </div>
+}
+        </container>
+
+@if(Model.PageViewModel.HasPreviousPage){
+    <a asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber-1)"
+    class="btn btn-outline-dark"><i class="glyphicon glyphicon-chevron-left"></i>Зад</a>
+}
+@if(Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber+1)"
+   class="btn btn-outline-dark"><i class="glyphicon glyphicon-chevron-right"></i>Вперде</a>
+}

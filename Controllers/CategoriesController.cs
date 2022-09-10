@@ -11,9 +11,9 @@ namespace MVC.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly ShopContext _context;
+        private readonly LibContext _context;
 
-        public CategoriesController(ShopContext context)
+        public CategoriesController(LibContext context)
         {
             _context = context;
         }
@@ -37,8 +37,6 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Category category)
         {
-            if (_context.Categories.Any(b => b.Name == category.Name))
-                ModelState.AddModelError("Name", "Такой бренд уже есть, введите другое название");
             if (ModelState.IsValid)
             {
                 _context.Add(category);
