@@ -27,7 +27,7 @@ namespace MVC
         {
             services.AddControllersWithViews();
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<LibContext>(options => options.UseSqlite(connection));
+            services.AddDbContext<LibContext>(options => options.UseNpgsql(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

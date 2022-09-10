@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +16,12 @@ namespace MVC.Controllers
     public class BooksController : Controller
     {
         private readonly LibContext _context;
+        private readonly IWebHostEnvironment appEnvironment;
 
-        public BooksController(LibContext context)
+        public BooksController(LibContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            this.appEnvironment = appEnvironment;
         }
 
         // GET: Books
@@ -161,7 +165,14 @@ namespace MVC.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        public async Task<IActionResult> DownloadFile(int id)
+        {
+            var book = await _context.Books.FindAsync(id);
+            string filePath = Path.Combine(appEnvironment.ContentRootPath, $"files/{book.Autor}_{book.Name}.pdf");
+            string fileType = "application/pdf";
+            string fileName = $"{book.Autor}_{book.Name}.pdf";
+            return PhysicalFile(filePath, fileType, fileName);
+        }
         private bool BookExists(int id)
         {
             return _context.Books.Any(e => e.Id == id);

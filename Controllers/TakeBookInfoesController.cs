@@ -70,7 +70,10 @@ namespace MVC.Controllers
                 var ptbi = new PersonTakeBookInfoesModel
                 {
                     Person = ps,
-                    TakeBookInfoes = _context.TakeBookInfos.Include(p=>p.Person).Include(t => t.Book).Where(p=>p.PersonId == ps.Id)
+                    TakeBookInfoes = _context.TakeBookInfos
+                    .Include(p => p.Person)
+                    .Include(t => t.Book)
+                    .Where(p => p.PersonId == ps.Id).Where(t => t.TakeBackDate == null)
                 };
                 return View(ptbi);
             }
