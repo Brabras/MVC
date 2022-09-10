@@ -30,7 +30,10 @@ namespace MVC.Controllers
             int pageSize = 3;
             var libContext = _context.Books.Include(b => b.Category);
             var count = await libContext.CountAsync();
-            var items = await libContext.Skip((page-1)*pageSize).Take(pageSize).OrderByDescending(i=>i.AddingDate).ToListAsync();
+            var items = await libContext.OrderByDescending(i => i.AddingDate)
+                .Skip((page-1)*pageSize)
+                .Take(pageSize)
+                .ToListAsync();
             PageViewModel pwm = new PageViewModel(count, page, pageSize);
             var booksListModel = new BooksListViewModel{
                 Books = items,
